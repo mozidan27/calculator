@@ -1,24 +1,25 @@
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class MyButtom extends StatelessWidget {
-  const MyButtom(
+  MyButtom(
       {super.key,
-      this.color,
-      this.textColor,
+      required this.color,
+      required this.textColor,
       required this.buttomText,
-      this.buttomTapped});
+      this.onTap});
 
-  final color;
-  final textColor;
+  final Color? color;
+  final Color? textColor;
   final String buttomText;
-  final buttomTapped;
+  void Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: GestureDetector(
-        onTap: buttomTapped,
+        onTap: onTap,
         child: ClipRRect(
           child: Container(
             decoration: BoxDecoration(shape: BoxShape.circle, color: color),

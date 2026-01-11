@@ -1,5 +1,6 @@
 import 'package:calculator/widgets/buttom.dart';
 import 'package:flutter/material.dart';
+import 'package:math_expressions/math_expressions.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -77,11 +78,12 @@ class _HomePageState extends State<HomePage> {
                 itemBuilder: (context, index) {
                   if (index == 0 || index == 1 || index == 2) {
                     return MyButtom(
-                      buttomTapped: () {
+                      onTap: () {
                         setState(
                           () {
                             if (index == 0) {
                               qustion = '';
+                              answer = '';
                             } else if (index == 1) {
                               qustion = '';
                             } else if (index == 2) {
@@ -96,12 +98,14 @@ class _HomePageState extends State<HomePage> {
                     );
                   } else {
                     return MyButtom(
-                      buttomTapped: () {
+                      onTap: () {
                         setState(
                           () {
                             if (index == 18) {
                               qustion =
                                   qustion.substring(0, qustion.length - 1);
+                            } else if (index == buttoms.length - 1) {
+                              equalPressedButtom();
                             } else {
                               qustion += buttoms[index];
                             }
@@ -129,10 +133,14 @@ class _HomePageState extends State<HomePage> {
     return false;
   }
 
-  // bool isOperator2(String AC) {
-  //   if (AC == 'AC' || AC == '+/-' || AC == '%') {
-  //     return true;
-  //   }
-  //   return false;
-  // }
+  void equalPressedButtom() {
+    String finalQuestion = qustion;
+    finalQuestion = finalQuestion.replaceAll('x', '*');
+    GrammarParser p = GrammarParser();
+    Expression exp = p.parse(finalQuestion);
+    ContextModel cm = ContextModel();
+    double eval = exp.evaluate(EvaluationType.REAL, cm);
+
+    answer = eval.toString();
+  }
 }
