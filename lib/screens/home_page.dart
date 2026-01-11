@@ -102,8 +102,10 @@ class _HomePageState extends State<HomePage> {
                         setState(
                           () {
                             if (index == 18) {
-                              qustion =
-                                  qustion.substring(0, qustion.length - 1);
+                              qustion.isNotEmpty
+                                  ? qustion =
+                                      qustion.substring(0, qustion.length - 1)
+                                  : null;
                             } else if (index == buttoms.length - 1) {
                               equalPressedButtom();
                             } else {
@@ -134,13 +136,22 @@ class _HomePageState extends State<HomePage> {
   }
 
   void equalPressedButtom() {
-    String finalQuestion = qustion;
-    finalQuestion = finalQuestion.replaceAll('x', '*');
-    GrammarParser p = GrammarParser();
-    Expression exp = p.parse(finalQuestion);
-    ContextModel cm = ContextModel();
-    double eval = exp.evaluate(EvaluationType.REAL, cm);
+    try {
+      String finalQuestion = qustion.replaceAll('x', '*');
 
-    answer = eval.toString();
+      GrammarParser p = GrammarParser();
+      Expression exp = p.parse(finalQuestion);
+
+      ContextModel cm = ContextModel();
+      double eval = exp.evaluate(EvaluationType.REAL, cm);
+
+      setState(() {
+        answer = eval.toString();
+      });
+    } catch (e) {
+      setState(() {
+        answer = 'Error';
+      });
+    }
   }
 }
